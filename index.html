@@ -23,7 +23,7 @@
 
         function preload() {
             game.load.image('ground', 'assets/light_grass.png');
-            game.load.spritesheet('koala', 'assets/walking koala.png', 16, 16, 16);
+            game.load.spritesheet('koala', 'assets/walking koala.png', 48, 48, 16);
             game.load.spritesheet('trees', 'assets/walls_1x2.png', 32, 64);
         }
 
@@ -51,8 +51,8 @@
             player = game.add.sprite(game.world.width / 2, game.world.height / 2, 'koala');
             game.physics.arcade.enable(player);
             player.body.collideWorldBounds = true;
-            player.animations.add('left', [8, 9, 10, 11], 10, true);
-            player.animations.add('right', [4, 5, 6, 7], 10, true);
+            player.animations.add('right', [8, 9, 10, 11], 10, true);
+            player.animations.add('left', [4, 5, 6, 7], 10, true);
             player.animations.add('down', [0, 1, 2, 3], 10, true);
             player.animations.add('up', [12, 13, 14, 15], 10, true);
             cursors = game.input.keyboard.createCursorKeys();
