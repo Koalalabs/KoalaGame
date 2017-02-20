@@ -21,11 +21,66 @@
             update: update
         });
 
-        function preload() {}
+        function preload() {
+            game.load.image('ground', 'assets/light_grass.png');
+            game.load.image('koala', 'assets/walking koala.png');
+            game.load.spritesheet('trees', 'assets/walls_1x2.png', 32, 64);
+        }
 
-        function create() {}
+        function create() {
+            game.physics.startSystem(Phaser.Physics.ARCADE);
+            land = game.add.tileSprite(0, 0, 800, 600, 'ground');
+            land.fixedToCamera = true;
+            trees = game.add.group();
+            trees.enableBody = true;
+            for (var i = 1; i < 25; i++) {
+                var baumVariante = Math.floor(Math.random() * 8);
+                var treesBorder = trees.create(i * 32, -32, 'trees', baumVariante);
+                treesBorder.body.immovable = true;
+            }
+            for (var i = 0; i < 25; i++) {
+                var baumVariante = Math.floor(Math.random() * 8);
+                var treesBorder = trees.create(i * 32, game.world.height - 64, 'trees', baumVariante);
+                treesBorder.body.immovable = true;
+            }
+            for (var i = -1; i < 18; i++) {
+                var baumVariante = Math.floor(Math.random() * 8);
+                var treesBorder = trees.create(0, i * 32, 'trees', baumVariante);
+                treesBorder.body.immovable = true;
+            }
+            player = game.add.sprite(game.world.width / 2, game.world.height / 2, 'koala');
+            game.physics.arcade.enable(player);
+            player.body.collideWorldBounds = true;
+            player.animations.add('left', [8, 9, 10, 11], 10, true);
+            player.animations.add('right', [4, 5, 6, 7], 10, true);
+            player.animations.add('down', [0, 1, 2, 3], 10, true);
+            player.animations.add('up', [12, 13, 14, 15], 10, true);
+            cursors = game.input.keyboard.createCursorKeys();
+        }
 
-        function update() {}
+        function update() {
+            game.physics.arcade.collide(player, trees);
+
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+
+            if (cursors.left.isDown || Phaser.Keyboard.A.isDown) {
+                player.body.velocity.x = -150;
+                player.animations.play('left');
+            } else if (cursors.right.isDown || Phaser.Keyboard.D.isDown) {
+                player.body.velocity.x = 150;
+                player.animations.play('right');
+            } else if (cursors.up.isDown || Phaser.Keyboard.W.isDown) {
+                player.body.velocity.y = -150;
+                player.animations.play('up');
+            } else if (cursors.down.isDown || Phaser.Keyboard.S.isDown) {
+                player.body.velocity.y = 150;
+                player.animations.play('down');
+            } else {
+                player.animations.stop();
+                player.frame = 1;
+            }
+        }
     </script>
 
 </body>
